@@ -40,3 +40,4 @@ wheels/
 # Environment variables
 .env
 .env.local
+db.sqlite3
