@@ -5,6 +5,7 @@ from .views import (
     SessionJoinView,
     SessionVoteView,
     SessionResultView,
+    SessionFetchRestaurantsView,
 )
 
 app_name = 'sessions'
@@ -18,6 +19,9 @@ urlpatterns = [
     
     # Join an existing session
     path('<str:code>/join/', SessionJoinView.as_view(), name='join'),
+    
+    # Fetch and link restaurants from Google Places API
+    path('<str:code>/fetch-restaurants/', SessionFetchRestaurantsView.as_view(), name='fetch-restaurants'),
     
     # Submit a vote
     path('<str:code>/vote/', SessionVoteView.as_view(), name='vote'),

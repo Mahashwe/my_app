@@ -22,6 +22,14 @@ class Session(models.Model):
     # Session status
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     
+    # Restaurants linked to this session (many-to-many for flexibility)
+    restaurants = models.ManyToManyField(
+        Restaurant,
+        related_name='sessions',
+        blank=True,
+        help_text='Restaurants that participants can vote on in this session'
+    )
+    
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
