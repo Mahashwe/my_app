@@ -1,6 +1,6 @@
 # Where Tonight 🍽️
 
-**AI that decides where your friend group is eating — no more “you decide” chaos.**
+**AI that decides where your friend group is eating — no more "you decide" chaos.**
 
 ## Overview
 
@@ -12,11 +12,11 @@ The goal is to eliminate group decision paralysis and reduce the time it takes t
 
 Whenever friends plan to eat out, the conversation usually looks like this:
 
-* “Anywhere is fine.”
-* “You decide.”
-* “I’m okay with anything.”
+* "Anywhere is fine."
+* "You decide."
+* "I'm okay with anything."
 
-Even with restaurant discovery apps, groups still struggle to make a final decision. The issue isn’t finding restaurants — it's agreeing on one.
+Even with restaurant discovery apps, groups still struggle to make a final decision. The issue isn't finding restaurants — it's agreeing on one.
 
 This leads to unnecessary delays and frustration during group plans.
 
@@ -60,7 +60,7 @@ The entire process takes around **60 seconds**.
 **APIs**
 
 * Google Places API (restaurant data)
-* Groq API (AI-based preference matching)
+* Gemini API (AI-based preference matching)
 
 **Hosting**
 
@@ -68,7 +68,6 @@ The entire process takes around **60 seconds**.
 * Expo (mobile)
 
 ## Repository Structure
-
 ```
 where-tonight/
 │
