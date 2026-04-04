@@ -1,91 +1,118 @@
-# Where Tonight - Frontend
+# 📱 Where Tonight - React Native Mobile App
 
-React-based frontend for the "Where Tonight" group restaurant voting application.
+React Native mobile app (iOS & Android) for the "Where Tonight" group restaurant voting application.
 
 ## Features
 
 - 🎯 Create voting sessions with unique codes
-- 👥 Join sessions and invite friends
-- 🍽️ Vote yes/no on restaurants from Google Places
+- 👥 Join sessions and invite friends  
+- 📍 Automatic geolocation for nearby restaurants
+- 🗳️ Vote yes/no on restaurants from Google Places
 - 📊 View real-time voting results
-- 💻 Clean, responsive UI
+- 🚀 Works on Android & iOS
 
 ## Tech Stack
 
-- **React** - UI library
-- **React Router** - Client-side routing
+- **React Native** - iOS & Android native development
+- **Expo** - Development platform & build service
+- **React Navigation** - Mobile navigation
 - **Axios** - HTTP client
-- **CSS** - Styling
+- **Expo Location** - Geolocation services
 
-## Setup
+## Prerequisites
 
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js 16+ and npm
+- iOS device/simulator (Mac required for iOS)
+- Android device/emulator (optional)
+- Expo CLI: `npm install -g expo-cli`
 
-### Installation
+## Installation
 
-1. Install dependencies:
+### 1. Navigate to Frontend Directory
+```bash
+cd frontend
+```
+
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-2. Create `.env` file (copy from `.env.example`):
+### 3. Configure Backend URL
+
+Edit `.env` if your backend is not on `http://localhost:8000`:
+```
+REACT_APP_API_URL=http://YOUR_BACKEND_URL/api
+```
+
+## Running the App
+
+### Start Development Server
 ```bash
-cp .env.example .env
-```
-
-3. Update `.env` if needed:
-```
-REACT_APP_API_URL=http://localhost:8000/api
-```
-
-### Running the App
-
-Development mode:
-```bash
+npm run dev
+# or
 npm start
 ```
 
-The app will open at `http://localhost:3000`
+This opens the Expo dev menu with options to:
+- Run on iOS simulator (Mac only)
+- Run on Android emulator  
+- Run on physical device (install Expo Go app first)
 
-### Building for Production
+### Option 1: Physical Device
+1. Install **Expo Go** app from App Store or Google Play
+2. Run `npm start`
+3. Scan the QR code with your phone
 
+### Option 2: iOS Simulator (Mac)
 ```bash
-npm run build
+npm run ios
+```
+
+### Option 3: Android Emulator
+```bash
+npm run android
 ```
 
 ## Project Structure
 
 ```
 frontend/
-├── public/              # Static assets
-│   ├── index.html      # HTML template
-│   └── index.css       # Global styles
-├── src/
-│   ├── components/     # Reusable components
-│   │   └── RestaurantCard.js
-│   ├── pages/          # Page components
-│   │   ├── Home.js
-│   │   ├── CreateSession.js
-│   │   ├── JoinSession.js
-│   │   └── VotingPage.js
-│   ├── services/       # API services
-│   │   └── api.js      # Backend API client
-│   ├── App.js          # Main app component
-│   ├── App.css         # App styles
-│   └── index.js        # React entry point
-├── package.json        # Dependencies
-└── .env.example        # Environment variables template
+├── App.js                          # Main app entry
+├── index.js                        # React Native entry point
+├── app.json                        # Expo configuration
+├── app/
+│   ├── navigation/
+│   │   └── RootNavigator.js       # Stack navigation setup
+│   ├── screens/
+│   │   ├── HomeScreen.js          # Landing page
+│   │   ├── CreateSessionScreen.js # Create voting session
+│   │   ├── JoinSessionScreen.js   # Join voting session
+│   │   └── VotingSessionScreen.js # Main voting interface
+│   ├── components/
+│   │   ├── Button.js              # Reusable button
+│   │   └── RestaurantCard.js      # Restaurant voting card
+│   ├── services/
+│   │   └── api.js                 # Backend API client
+│   └── context/
+│       └── SessionContext.js      # Global session state
+├── package.json                   # Dependencies
+├── .env                           # Environment config
+└── README.md                      # This file
 ```
 
-## API Integration
+## Permissions
 
-The frontend communicates with the Django REST Framework backend. 
+The app requests:
+- **Location** - To find nearby restaurants (iOS & Android)
 
-### Backend Requirements
+Grant permissions when prompted for best experience.
 
-Ensure the backend is running at `http://localhost:8000` with these endpoints:
+## API Connection
+
+The app connects to backend at `http://localhost:8000/api` by default.
+
+### Required Backend Endpoints
 
 - `POST /api/sessions/create/` - Create session
 - `GET /api/sessions/<code>/` - Get session details
@@ -94,51 +121,74 @@ Ensure the backend is running at `http://localhost:8000` with these endpoints:
 - `POST /api/sessions/<code>/vote/` - Submit vote
 - `GET /api/sessions/<code>/result/` - Get results
 
-## Usage
+## Usage Flow
 
-1. **Create Session**: Click "Create New Session" on home page, enter your name
-2. **Share Code**: Share the session code with friends
-3. **Join Session**: Friends click "Join Existing Session", enter code and their name
-4. **Find Restaurants**: Click "Find Nearby Restaurants"
-5. **Vote**: Vote yes/no on each restaurant
-6. **View Results**: Click "View Results" to see rankings
-
-## Available Scripts
-
-- `npm start` - Start development server
-- `npm build` - Build for production
-- `npm test` - Run tests
-- `npm run dev` - Alias for start
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+1. **Home** - Choose to create or join a session
+2. **Create** - Enter your name to start a new voting session
+3. **Session Code** - Share the unique code with friends
+4. **Join** - Friends enter code and their name
+5. **Find Restaurants** - App fetches nearby restaurants
+6. **Vote** - Tap Yes/No on each restaurant
+7. **Results** - View voting rankings
 
 ## Troubleshooting
 
-### API Connection Error
+### Can't Connect to Backend
 - Ensure Django backend is running: `python manage.py runserver`
-- Check `.env` has correct API URL
-- Verify CORS is enabled in Django settings
+- Check backend is accessible: `http://localhost:8000/admin`
+- Update `.env` with correct backend URL
+- On physical device, use your computer's IP instead of localhost
 
-### Restaurants Not Loading
-- Backend may not have Google Places API key configured
-- Check backend logs for API errors
+### Location Permission Denied
+- Go to app permissions in Settings
+- Enable Location Access for Expo Go or the app
 
-## Development Notes
+### App Won't Start
+- Clear cache: `expo start --clear`
+- Clear node_modules: `rm -rf node_modules && npm install`
+- Restart development server
 
-- The app uses plain CSS for styling (no build tool needed)
-- State management is handled with React hooks
-- API calls use Axios with a centralized service
-- Routing uses React Router v6
+### Can't See Android Emulator Option
+- Install Android emulator via Android Studio
+- Start emulator before running `npm start`
 
-## Future Enhancements
+## Building for Production
 
-- User authentication
-- Session history and analytics
-- Advanced filtering options
-- Geolocation for automatic restaurant discovery
-- Notification system
+### iOS
+```bash
+eas build --platform ios
+```
+
+### Android
+```bash
+eas build --platform android
+```
+
+Requires Expo account: `expo login`
+
+## Deployment
+
+For production deployment, see [Expo Documentation](https://docs.expo.dev/distribute/publish-links/)
+
+## Performance Tips
+
+- Use pull-to-refresh to update session data
+- Results load in modal without blocking voting
+- Images are lazy-loaded with caching
+- Minimal re-renders using React hooks
+
+## Browser Testing
+
+Test the web version with:
+```bash
+npm run web
+```
+
+Works in modern browsers but mobile native apps recommended.
+
+## Support
+
+For issues:
+1. Check backend logs: Terminal running Django
+2. Check Expo logs: Terminal output
+3. Enable debug logs: `expo log` in separate terminal

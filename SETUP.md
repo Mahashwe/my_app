@@ -1,7 +1,7 @@
 # Where Tonight - Full Stack Setup Guide
 
 ## Overview
-This is a complete Django REST Framework backend + React frontend application for group restaurant voting.
+This is a complete Django REST Framework backend + React Native mobile app application for group restaurant voting.
 
 ## Project Structure
 ```
@@ -9,7 +9,7 @@ my_app/
 ├── base/                    # Django project configuration
 ├── restaurant_options/      # Restaurant app
 ├── voting_sessions/         # Voting sessions app
-├── frontend/               # React frontend (NEW)
+├── frontend/               # React Native/Expo mobile app
 ├── db.sqlite3              # SQLite database
 ├── manage.py               # Django management
 ├── requirements.txt        # Python dependencies
@@ -67,29 +67,44 @@ Backend will be available at: `http://localhost:8000`
 http://localhost:8000/admin
 ```
 
-## Frontend Setup
+## Frontend Setup (React Native / Expo Mobile App)
 
-### 1. Navigate to Frontend Directory
+### 1. Prerequisites
+- Install Expo CLI: `npm install -g expo-cli`
+- Install Expo Go app on your phone (iOS App Store or Google Play)
+
+### 2. Navigate to Frontend Directory
 ```bash
 cd frontend
 ```
 
-### 2. Install Dependencies
+### 3. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Configure Environment
-The `.env` file is already set up to connect to localhost:8000
+### 4. Configure Backend Connection
+The `.env` file is already set up to connect to `http://localhost:8000/api`
 
-### 4. Start Frontend Development Server
+For physical devices, update the IP address instead of localhost:
+```
+REACT_APP_API_URL=http://{YOUR_COMPUTER_IP}:8000/api
+```
+
+### 5. Start Expo Development Server
 ```bash
+npm run dev
+# or
 npm start
 ```
 
-Frontend will automatically open at: `http://localhost:3000`
+### 6. Run On Device
+- **Physical Device**: Scan QR code with Expo Go app
+- **iOS Simulator** (Mac): Press `i`
+- **Android Emulator**: Press `a`
+- **Web**: Press `w` (for testing only)
 
-## Running Both Together
+## Running Backend & Mobile Together
 
 To see the full application working:
 
@@ -98,15 +113,16 @@ To see the full application working:
 cd my_app
 venv\Scripts\activate  # Windows
 python manage.py runserver
-```
-
-2. **Terminal 2 - Frontend:**
+```2. **Terminal 2 - Mobile Frontend:**
 ```bash
 cd my_app\frontend
 npm start
 ```
 
-3. **Browser:** Navigate to `http://localhost:3000`
+3. **On Your Phone:**
+- Open Expo Go app
+- Scan QR code from Terminal 2
+- App connects to backend automatically
 
 ## API Documentation
 
@@ -126,13 +142,14 @@ The backend provides the following endpoints:
 
 ## Usage Flow
 
-1. **Create Session**: Open frontend, click "Create New Session", enter your name
+1. **Create Session**: Open app, tap "Create New Session", enter your name
 2. **Get Share Code**: You'll get a unique 6-character code
-3. **Share with Friends**: Send them the code via chat/email
-4. **Friends Join**: They click "Join Existing Session", enter code and their name
-5. **Find Restaurants**: Click "Find Nearby Restaurants" (requires location)
-6. **Vote**: Each person votes Yes/No on restaurants
-7. **View Results**: Click "View Results" to see the winning restaurant
+3. **Share with Friends**: Send code via text/email
+4. **Friends Join**: Tap "Join Existing Session", enter code and name
+5. **Enable Location**: Allow app to access your location
+6. **Find Restaurants**: Tap "Find Nearby Restaurants"
+7. **Vote**: Tap Yes/No on each restaurant
+8. **View Results**: Tap "View Results" to see rankings
 
 ## Troubleshooting
 
