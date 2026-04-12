@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSession, fetchRestaurants, submitVote, getResults } from '../services/api';
 import RestaurantCard from '../components/RestaurantCard';
@@ -11,9 +11,11 @@ const VotingPage = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [votedRestaurants, setVotedRestaurants] = useState(new Set());
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState(null);
   const [fetchingRestaurants, setFetchingRestaurants] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   useEffect(() => {
     loadSession();
@@ -41,23 +43,72 @@ const VotingPage = () => {
       
       await fetchRestaurants(code, latitude, longitude);
       await loadSession();
+      setCurrentIndex(0);
     } catch (err) {
       setError('Unable to fetch restaurants. Please check your location.');
     }
     setFetchingRestaurants(false);
   };
 
-  const handleVote = async (restaurantId, liked) => {
+  const handleVote = async (restaurantId, liked, direction) => {
     try {
+      // Set swipe direction for animation
+      setSwipeDirection(direction);
+      
+      // Submit vote
       await submitVote(code, restaurantId, liked);
-      setVotedRestaurants(new Set([...votedRestaurants, restaurantId]));
+      
+      // Move to next card after animation
+      setTimeout(() => {
+        setCurrentIndex(prev => prev + 1);
+        setSwipeDirection(null);
+      }, 300);
     } catch (err) {
       setError('Failed to submit vote');
+      setSwipeDirection(null);
     }
   };
 
-  const handleViewResults = () => {
-    setShowResults(true);
+  // Handle keyboard votes (Arrow keys)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (currentIndex < restaurants.length) {
+        if (e.key === 'ArrowRight') {
+          handleVote(restaurants[currentIndex].id, true, 'right');
+        } else if (e.key === 'ArrowLeft') {
+          handleVote(restaurants[currentIndex].id, false, 'left');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex, restaurants]);
+
+  // Handle touch swipe
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (currentIndex >= restaurants.length) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX.current - touchEndX;
+    const diffY = touchStartY.current - touchEndY;
+
+    // Only detect swipe if vertical movement is minimal
+    if (Math.abs(diffY) < 50) {
+      if (diffX > 50) {
+        // Swiped left (dislike)
+        handleVote(restaurants[currentIndex].id, false, 'left');
+      } else if (diffX < -50) {
+        // Swiped right (like)
+        handleVote(restaurants[currentIndex].id, true, 'right');
+      }
+    }
   };
 
   if (loading) {
@@ -67,6 +118,9 @@ const VotingPage = () => {
   if (error && !session) {
     return <div className="voting-container"><div className="error">{error}</div></div>;
   }
+
+  const allVoted = currentIndex >= restaurants.length;
+  const currentRestaurant = restaurants[currentIndex];
 
   return (
     <div className="voting-container">
@@ -89,31 +143,39 @@ const VotingPage = () => {
             {fetchingRestaurants ? 'Finding restaurants...' : 'Find Nearby Restaurants'}
           </button>
         </div>
-      ) : (
-        <div className="voting-content">
-          <div className="restaurants-grid">
-            {restaurants.map((restaurant) => (
-              <RestaurantCard
-                key={restaurant.id}
-                restaurant={restaurant}
-                onVote={handleVote}
-                hasVoted={votedRestaurants.has(restaurant.id)}
-              />
-            ))}
-          </div>
-
-          <div className="voting-actions">
-            <button className="btn btn-primary" onClick={handleViewResults}>
-              View Results
-            </button>
+      ) : allVoted ? (
+        <div className="voting-complete">
+          <div className="complete-content">
+            <div className="checkmark">✓</div>
+            <h2>All Votes Recorded!</h2>
+            <p>Waiting for other participants to finish voting...</p>
+            <div className="progress-info">
+              <p className="progress-text">You voted on {restaurants.length} restaurants</p>
+            </div>
           </div>
         </div>
-      )}
+      ) : (
+        <div className="voting-swipe-area" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          <div className="card-counter">
+            {currentIndex + 1} / {restaurants.length}
+          </div>
 
-      {error && <div className="error-message">{error}</div>}
+          <div className="swipe-card-container">
+            <RestaurantCard
+              restaurant={currentRestaurant}
+              onVote={handleVote}
+              swipeDirection={swipeDirection}
+              showSwipeButtons={true}
+            />
+          </div>
 
-      {showResults && (
-        <ResultsModal code={code} onClose={() => setShowResults(false)} />
+          <div className="swipe-hints">
+            <div className="hint hint-left">← Dislike</div>
+            <div className="hint hint-right">Like →</div>
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+        </div>
       )}
 
       <ParticipantsList participants={session?.participants || []} />
@@ -121,74 +183,10 @@ const VotingPage = () => {
   );
 };
 
-const ResultsModal = ({ code, onClose }) => {
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadResults();
-  }, [code]);
-
-  const loadResults = async () => {
-    try {
-      const response = await getResults(code);
-      setResults(response.data);
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="modal-overlay">
-        <div className="modal">
-          <p>Loading results...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>Vote Results</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
-        </div>
-        <div className="results-list">
-          {results.length === 0 ? (
-            <p>No votes yet</p>
-          ) : (
-            results.map((result, index) => (
-              <div key={index} className="result-item">
-                <div className="result-rank">#{index + 1}</div>
-                <div className="result-details">
-                  <h3>{result.restaurant.name}</h3>
-                  <p className="result-address">{result.restaurant.address}</p>
-                  <div className="result-stats">
-                    <span className="rating">⭐ {result.restaurant.rating}</span>
-                  </div>
-                </div>
-                <div className="result-votes">
-                  <div>
-                    <span className="vote-count like">{result.likes}</span>
-                    <p>Likes</p>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const ParticipantsList = ({ participants }) => {
   return (
     <div className="participants-panel">
-      <h3>Participants</h3>
+      <h3>Participants ({participants.length})</h3>
       <ul className="participants-list">
         {participants.map((p) => (
           <li key={p.id}>{p.name}</li>

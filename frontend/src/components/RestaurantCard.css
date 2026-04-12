@@ -1,73 +1,120 @@
 .restaurant-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  height: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
-.restaurant-card:hover {
+.restaurant-card:hover:not(.swipe-card) {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+}
+
+/* Swipe card for single-card view */
+.swipe-card {
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  margin: 0 auto;
+  transform: scale(1) translateX(0) rotateZ(0deg);
+  opacity: 1;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Swipe right animation (like) */
+.swipe-card.swipe-right {
+  transform: translateX(500px) rotateZ(20deg) scale(0.95);
+  opacity: 0;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+}
+
+/* Swipe left animation (dislike) */
+.swipe-card.swipe-left {
+  transform: translateX(-500px) rotateZ(-20deg) scale(0.95);
+  opacity: 0;
+  box-shadow: 0 8px 24px rgba(244, 67, 54, 0.3);
 }
 
 .restaurant-image {
   width: 100%;
-  height: 200px;
+  height: 300px;
   overflow: hidden;
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+  position: relative;
 }
 
 .restaurant-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.swipe-card:hover .restaurant-image img {
+  transform: scale(1.05);
 }
 
 .restaurant-content {
-  padding: 20px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   flex: 1;
+  justify-content: space-between;
+}
+
+.restaurant-header {
+  margin-bottom: 12px;
 }
 
 .restaurant-name {
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
 }
 
 .restaurant-address {
-  margin: 0 0 12px 0;
-  font-size: 13px;
+  margin: 0 0 16px 0;
+  font-size: 14px;
   color: #666;
-  line-height: 1.4;
+  line-height: 1.6;
 }
 
 .restaurant-meta {
   display: flex;
   gap: 12px;
-  margin-bottom: 15px;
-  font-size: 13px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .rating {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
   color: #ff9500;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 15px;
+  background: rgba(255, 149, 0, 0.1);
+  padding: 6px 10px;
+  border-radius: 8px;
 }
 
 .price {
-  color: #999;
-  font-weight: 500;
+  display: inline-block;
+  color: #666;
+  font-weight: 600;
+  font-size: 14px;
+  background: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 8px;
 }
 
+/* Vote buttons for grid view */
 .vote-buttons {
   display: flex;
   gap: 10px;
@@ -98,6 +145,100 @@
 .vote-btn.like.voted {
   background: #4caf50;
   color: white;
+}
+
+.vote-btn.dislike {
+  color: #f44336;
+  border-color: #f44336;
+}
+
+.vote-btn.dislike:hover:not(:disabled) {
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.vote-btn.dislike.voted {
+  background: #f44336;
+  color: white;
+}
+
+.vote-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.voted-text {
+  text-align: center;
+  color: #4caf50;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  padding: 8px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 6px;
+}
+
+/* Swipe vote buttons for single-card view */
+.vote-buttons-swipe {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.vote-buttons-swipe .vote-btn {
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 60px;
+  justify-content: center;
+}
+
+.vote-buttons-swipe .emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.vote-buttons-swipe .label {
+  font-size: 13px;
+}
+
+.vote-buttons-swipe .like-btn {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.vote-buttons-swipe .like-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.vote-buttons-swipe .like-btn:active {
+  transform: translateY(0);
+}
+
+.vote-buttons-swipe .dislike-btn {
+  background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.vote-buttons-swipe .dislike-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+}
+
+.vote-buttons-swipe .dislike-btn:active {
+  transform: translateY(0);
+}
 }
 
 .vote-btn.dislike {
