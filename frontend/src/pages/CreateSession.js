@@ -22,7 +22,11 @@ const CreateSession = () => {
     try {
       const response = await createSession(name);
       const sessionCode = response.data.code;
-      navigate(`/session/${sessionCode}`);
+      
+      // Store creator name in session storage for WaitingRoom
+      sessionStorage.setItem('creatorName', name);
+      
+      navigate(`/session/${sessionCode}/waiting`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create session');
       setLoading(false);

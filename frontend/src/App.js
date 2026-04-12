@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CreateSession from './pages/CreateSession';
 import JoinSession from './pages/JoinSession';
+import WaitingRoom from './pages/WaitingRoom';
 import VotingPage from './pages/VotingPage';
 import './App.css';
 
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateSession />} />
         <Route path="/join" element={<JoinSession />} />
+        <Route path="/session/:code/waiting" element={<WaitingRoom />} />
         <Route path="/session/:code" element={<VotingPage />} />
       </Routes>
     </Router>

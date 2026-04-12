@@ -21,8 +21,13 @@ const JoinSession = () => {
     setError('');
 
     try {
-      await joinSession(code.toUpperCase(), name);
-      navigate(`/session/${code.toUpperCase()}`);
+      const upperCode = code.toUpperCase();
+      await joinSession(upperCode, name);
+      
+      // Store participant name in session storage
+      sessionStorage.setItem('participantName', name);
+      
+      navigate(`/session/${upperCode}/waiting`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to join session. Please check the code.');
       setLoading(false);
