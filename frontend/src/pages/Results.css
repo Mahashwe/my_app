@@ -1,0 +1,451 @@
+/* Results Page Styles */
+.results-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Loading & Error States */
+.loading,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  color: white;
+  font-size: 24px;
+}
+
+.error-state {
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.error-state h2 {
+  margin: 20px 0;
+  font-size: 28px;
+}
+
+/* Confetti Animation */
+.confetti-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  opacity: 0.8;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Winner Section */
+.winner-section {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 20px;
+  padding: 30px 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  margin: 20px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.confetti-emoji {
+  font-size: 60px;
+  text-align: center;
+  margin-bottom: 10px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.winner-headline {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  color: #667eea;
+  margin: 15px 0;
+  letter-spacing: 1px;
+}
+
+.winner-card {
+  margin: 25px 0;
+}
+
+.winner-photo {
+  width: 100%;
+  height: 300px;
+  background: #f0f0f0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.winner-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.winner-details {
+  padding: 0 10px;
+}
+
+.winner-name {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin: 15px 0;
+  word-wrap: break-word;
+}
+
+.rating-section {
+  margin: 15px 0;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars {
+  font-size: 20px;
+  color: #ff9800;
+}
+
+.price-level {
+  margin: 10px 0;
+}
+
+.price-indicator {
+  font-size: 18px;
+  font-weight: bold;
+  color: #667eea;
+  background: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.address {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 15px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.address-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.address-text {
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.like-count {
+  font-size: 18px;
+  color: #333;
+  margin: 20px 0;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 150px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+  background: #f9f9f9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Share Message */
+.share-message {
+  margin-top: 15px;
+  padding: 12px 20px;
+  background: #4caf50;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Runners Up Section */
+.runners-section {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.runners-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.runners-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.runner-card {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.runner-card:hover {
+  transform: translateY(-5px);
+}
+
+.runner-rank {
+  font-size: 32px;
+  font-weight: bold;
+  color: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.runner-photo {
+  width: 80px;
+  height: 80px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.runner-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.runner-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.runner-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 8px 0;
+  word-wrap: break-word;
+}
+
+.runner-details {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.runner-rating {
+  font-size: 14px;
+  color: #ff9800;
+  font-weight: 600;
+}
+
+.runner-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #667eea;
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.runner-address {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+  word-wrap: break-word;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.runner-votes {
+  font-size: 12px;
+  color: #999;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .results-container {
+    padding: 15px;
+  }
+
+  .winner-section {
+    padding: 20px 15px;
+    border-radius: 15px;
+  }
+
+  .winner-headline {
+    font-size: 28px;
+  }
+
+  .winner-name {
+    font-size: 24px;
+  }
+
+  .winner-photo {
+    height: 250px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    min-width: 100%;
+  }
+
+  .runners-title {
+    font-size: 20px;
+  }
+
+  .runner-card {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .runner-rank {
+    font-size: 24px;
+    min-width: 40px;
+  }
+
+  .runner-photo {
+    width: 70px;
+    height: 70px;
+  }
+
+  .runner-name {
+    font-size: 16px;
+  }
+
+  .confetti-emoji {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .winner-section {
+    max-width: 100%;
+  }
+
+  .runners-section {
+    max-width: 100%;
+  }
+}

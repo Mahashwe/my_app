@@ -85,6 +85,13 @@ const VotingPage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex, restaurants]);
 
+  // Navigate to results when all votes are submitted
+  useEffect(() => {
+    if (currentIndex >= restaurants.length && restaurants.length > 0) {
+      navigate(`/session/${code}/results`);
+    }
+  }, [currentIndex, restaurants.length, code, navigate]);
+
   // Handle touch swipe
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -142,17 +149,6 @@ const VotingPage = () => {
           >
             {fetchingRestaurants ? 'Finding restaurants...' : 'Find Nearby Restaurants'}
           </button>
-        </div>
-      ) : allVoted ? (
-        <div className="voting-complete">
-          <div className="complete-content">
-            <div className="checkmark">✓</div>
-            <h2>All Votes Recorded!</h2>
-            <p>Waiting for other participants to finish voting...</p>
-            <div className="progress-info">
-              <p className="progress-text">You voted on {restaurants.length} restaurants</p>
-            </div>
-          </div>
         </div>
       ) : (
         <div className="voting-swipe-area" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>

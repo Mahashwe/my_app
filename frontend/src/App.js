@@ -5,6 +5,7 @@ import CreateSession from './pages/CreateSession';
 import JoinSession from './pages/JoinSession';
 import WaitingRoom from './pages/WaitingRoom';
 import VotingPage from './pages/VotingPage';
+import Results from './pages/Results';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/join" element={<JoinSession />} />
         <Route path="/session/:code/waiting" element={<WaitingRoom />} />
         <Route path="/session/:code" element={<VotingPage />} />
+        <Route path="/session/:code/results" element={<Results />} />
       </Routes>
     </Router>
   );
